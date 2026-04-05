@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Cainta Catholic College Clinic</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #1e3a8a;
+            --accent-orange: #f97316;
+            --bg-light: #f4f6f8;
+            --text-slate: #64748b;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-light);
+            margin: 0; padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-blue);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 { font-size: 1.2rem; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+
+        .dashboard-content {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        /* Modern Profile Header */
+        .profile-hero {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 25px;
+            border-left: 6px solid var(--primary-blue);
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-blue);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+        }
+
+        .profile-details h2 { margin: 0; color: var(--primary-blue); font-weight: 700; }
+        .profile-details p { margin: 0; color: var(--text-slate); font-size: 1.1rem; }
+
+        /* Information Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .info-section h4 {
+            font-size: 1rem;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8fafc;
+        }
+
+        .data-label { color: var(--text-slate); font-weight: 500; }
+        .data-value { color: #1e293b; font-weight: 600; }
+
+        .medical-alert {
+            background: #fff1f2;
+            color: #be123c;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+
+        /* History Table Style */
+        .history-card {
+            background: white;
+            margin-top: 25px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .visit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .visit-item:hover {
+            border-color: var(--primary-blue);
+            background: #eff6ff;
+        }
+
+        .visit-date { font-weight: 700; color: var(--primary-blue); }
+        .visit-complaint { color: var(--text-slate); font-style: italic; }
+
+        .logout-btn {
+            background: var(--accent-orange);
+            color: white; border: none;
+            padding: 8px 18px; border-radius: 6px;
+            font-weight: 600; text-decoration: none;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { background: #ea580c; color: white; }
+
+        @media (max-width: 768px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .profile-hero { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>CAINTA CATHOLIC COLLEGE Clinic Management System</h1>
+    <a href="{{ url_for('logout') }}" class="logout-btn">Logout</a>
+</header>
+
+<div class="dashboard-content">
+    
+    <div class="profile-hero">
+        <div class="profile-avatar">
+            <i class="fas fa-user-graduate"></i>
+        </div>
+        <div class="profile-details">
+            <h2>{{ student.full_name }}</h2>
+            <p>Student ID: <strong>{{ student.student_number }}</strong></p>
+        </div>
+    </div>
+
+    <div class="info-grid">
+        <div class="info-section">
+            <h4><i class="fas fa-info-circle"></i> Student Info</h4>
+            <div class="data-row"><span class="data-label">Grade & Section</span><span class="data-value">{{ student.grade }} - {{ student.section }}</span></div>
+            <div class="data-row"><span class="data-label">Age</span><span class="data-value">{{ student.age }} yrs old</span></div>
+            <div class="data-row"><span class="data-label">Address</span><span class="data-value text-end">{{ student.address }}</span></div>
+        </div>
+
+        <div class="info-section">
+            <h4><i class="fas fa-hand-holding-medical"></i> Medical Records</h4>
+            <div class="data-row">
+                <span class="data-label">Allergies</span>
+                <span class="medical-alert">{{ student.allergies if student.allergies else 'None' }}</span>
+            </div>
+            <div class="data-row">
+                <span class="data-label">Condition</span>
+                <span class="data-value">{{ student.medical_condition if student.medical_condition else 'None Recorded' }}</span>
+            </div>
+        </div>
+
+        <div class="info-section shadow-sm" style="grid-column: span 2;">
+            <h4><i class="fas fa-phone-alt"></i> Emergency Contact</h4>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="data-label">Parent/Guardian</div>
+                    <div class="data-value">{{ student.parent_name }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="data-label">Contact Number</div>
+                    <div class="data-value">{{ student.parent_contact_number }}</div>
+                </div>
+                <div class="col-md-4">
+                    <div class="data-label">Email Address</div>
+                    <div class="data-value">{{ student.parent_email }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="history-card">
+        <h4 style="color: var(--primary-blue); margin-bottom: 20px;"><i class="fas fa-history"></i> Clinic Visit History</h4>
+        {% if visits %}
+            {% for visit in visits %}
+            <div class="visit-item" data-bs-toggle="modal" data-bs-target="#visitModal{{ visit.id }}">
+                <div>
+                    <span class="visit-date">{{ visit.time_in }}</span>
+                    <div class="visit-complaint">{{ visit.complaint[:60] }}...</div>
+                </div>
+                <i class="fas fa-chevron-right" style="color: #cbd5e1;"></i>
+            </div>
+
+            <div class="modal fade" id="visitModal{{ visit.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0">
+                        <div class="modal-header bg-primary text-white" style="background-color: var(--primary-blue) !important;">
+                            <h5 class="modal-title">Visit Details</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="mb-3"><small class="text-muted">Date & Time</small><br><strong>{{ visit.time_in }}</strong></div>
+                            <div class="row mb-3">
+                                <div class="col-6"><small class="text-muted">Temperature</small><br><strong>{{ visit.temperature }} °C</strong></div>
+                                <div class="col-6"><small class="text-muted">Status</small><br><span class="badge bg-success">Recorded</span></div>
+                            </div>
+                            <hr>
+                            <div class="mb-3"><small class="text-muted">Chief Complaint</small><br><p class="mb-0">{{ visit.complaint }}</p></div>
+                            <div class="mb-3"><small class="text-muted">Diagnosis</small><br><p class="mb-0">{{ visit.diagnosis }}</p></div>
+                            <div class="mb-0 text-primary" style="background: #f0f7ff; padding: 10px; border-radius: 8px;">
+                                <small>Prescribed Medicine:</small><br><strong>{{ visit.medicine }}</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="text-center py-4 text-muted">
+                <i class="fas fa-folder-open fa-3x mb-3"></i>
+                <p>No clinic visits recorded yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
